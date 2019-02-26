@@ -34,16 +34,28 @@ jobs:
   - Test_NanoServer1809_arm32
   pool: ${{ parameters.pool }}
   strategy:
-    matrix: $[ ${{ parameters.matrix }} ]
+    matrix:
+      Windows:
+        dotnetVersion: '*'
+        osType: windows
+        osVariant: '*'
+        osVersion: '*'
+        architecture: '*'
+      Linux:
+        dotnetVersion: '*'
+        osType: linux
+        osVariant: '*'
+        osVersion: '*'
+        architecture: '*'
   steps:
   - template: ../steps/init-docker-linux.yml
   - script: >
       $(runImageBuilderCmd) copyAcrImages
       --manifest $(manifest)
-      --path '$(dotnetVersion)/*/$(osVariant)*/*'
+      --path '*'
       --os-type $(osType)
       --os-version '$(osVersion)'
-      --architecture $(architecture)
+      --architecture '$(architecture)'
       --registry-override $(acr.server)
       --repo-prefix $(publishRepoPrefix)
       $(imageBuilder.queueArgs)
